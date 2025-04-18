@@ -6,6 +6,19 @@ from model import LogEntry
 import os
 import json
 import concurrent.futures
+from pydantic import BaseModel
+
+class LogAnalysis(BaseModel):
+    """
+    LogAnalysis
+    A model representing the analysis of log entries.
+    """
+    
+    successful_entries: list = []
+    failed_entries: list = []
+    service_entries: dict = {}
+    log_level_entries: dict = {} 
+
 
 def read_log_file(file_path):
     """
@@ -19,9 +32,9 @@ def read_log_file(file_path):
             for line in file:
                 yield line.strip()
     except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found.")
+        raise(f"Error: The file '{file_path}' was not found.")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        return f"An error occurred: {e}"
 
 def parse_log_line(line):
     """
@@ -31,6 +44,7 @@ def parse_log_line(line):
     :return: A LogEntry object or None if the line cannot be parsed
     """
     try:
+        # print(f"Parsing line: {line}")
         parts = line.split(" - ")
         if len(parts) == 4:
             parsed_entry = {
@@ -39,11 +53,12 @@ def parse_log_line(line):
                 "log_level": parts[2],
                 "message": parts[3]
             }
-
             entry = LogEntry(**parsed_entry)
-            return dict(entry)
+            output = dict(entry)
     except Exception as e:
-        return f"Failed to parse line: {line}. Error: {e}"
+        output = f"Failed to parse line: {line}. Error: {e}"
+    finally:
+        return output
 
 def dump_to_json(data, output_file):
     """
@@ -75,11 +90,16 @@ def log_results_decorator(func):
             else:
                 failed_entries.append(result)
         
-        # Dump successful entries to a JSON file
-        dump_to_json(successful_entries, "./output/successful_entries.json")
+        # Combine successful and failed entries into a single dictionary
+        combined_entries = {
+            "successful_entries": successful_entries,
+            "failed_entries": failed_entries
+        }
+
+
         
-        # Dump failed entries to a JSON file
-        dump_to_json(failed_entries, "./output/failed_entries.json")
+        # Dump the combined entries to a single JSON file
+        dump_to_json(combined_entries, "./output/combined_entries.json")
         
         return successful_entries  # Return only successful entries for further processing
     
@@ -93,3 +113,8 @@ def process_logs(log_file_path):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(parse_log_line, line): line for line in read_log_file(log_file_path)}
         return [future.result() for future in futures]
+
+
+app_path = "D:/my-git-repo/log-file-analyzer/log-file-analyzer/log-analyzer/app.log"
+process_logs("app.log")
+# process_logs(app_path)
