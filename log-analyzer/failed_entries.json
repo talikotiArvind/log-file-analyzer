@@ -1,0 +1,4 @@
+[
+    "Failed to parse line: 2023-03-01 08:20:05 - ServiceC - WARN - Disk usage is at 85%. Error: 1 validation error for LogEntry\nlog_level\n  Input should be 'DEBUG', 'INFO', 'WARNING', 'ERROR' or 'CRITICAL' [type=literal_error, input_value='WARN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/literal_error",
+    "Failed to parse line: 2023-03-01 09:10:00 - ServiceC - WARN - Low memory. Error: 1 validation error for LogEntry\nlog_level\n  Input should be 'DEBUG', 'INFO', 'WARNING', 'ERROR' or 'CRITICAL' [type=literal_error, input_value='WARN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/literal_error"
+]

@@ -1,0 +1,70 @@
+[
+    {
+        "date_time": "2023-03-01 08:15:27",
+        "service_name": "ServiceA",
+        "log_level": "INFO",
+        "message": "Started processing request #123"
+    },
+    {
+        "date_time": "2023-03-01 08:15:28",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Null pointer exception"
+    },
+    {
+        "date_time": "2023-03-01 08:15:29",
+        "service_name": "ServiceA",
+        "log_level": "INFO",
+        "message": "Completed request #123 in 2ms"
+    },
+    "Failed to parse line: 2023-03-01 08:20:05 - ServiceC - WARN - Disk usage is at 85%. Error: 1 validation error for LogEntry\nlog_level\n  Input should be 'DEBUG', 'INFO', 'WARNING', 'ERROR' or 'CRITICAL' [type=literal_error, input_value='WARN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/literal_error",
+    {
+        "date_time": "2023-03-01 08:35:10",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Null pointer exception"
+    },
+    {
+        "date_time": "2023-03-01 08:40:05",
+        "service_name": "ServiceA",
+        "log_level": "INFO",
+        "message": "Cleaned up temporary files"
+    },
+    {
+        "date_time": "2023-03-01 08:44:11",
+        "service_name": "ServiceD",
+        "log_level": "INFO",
+        "message": "Heartbeat check"
+    },
+    {
+        "date_time": "2023-03-01 09:00:00",
+        "service_name": "ServiceB",
+        "log_level": "INFO",
+        "message": "Started job X"
+    },
+    {
+        "date_time": "2023-03-01 09:00:01",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Job X failed to start"
+    },
+    {
+        "date_time": "2023-03-01 09:05:30",
+        "service_name": "???",
+        "log_level": "INFO",
+        "message": "Malformed line"
+    },
+    "Failed to parse line: 2023-03-01 09:10:00 - ServiceC - WARN - Low memory. Error: 1 validation error for LogEntry\nlog_level\n  Input should be 'DEBUG', 'INFO', 'WARNING', 'ERROR' or 'CRITICAL' [type=literal_error, input_value='WARN', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/literal_error",
+    {
+        "date_time": "2023-03-01",
+        "service_name": "ServiceA",
+        "log_level": "ERROR",
+        "message": "Missing timestamp detail"
+    },
+    {
+        "date_time": "2023-03-01 09:11:00",
+        "service_name": "ServiceE",
+        "log_level": "DEBUG",
+        "message": "This is a debug message"
+    }
+]
