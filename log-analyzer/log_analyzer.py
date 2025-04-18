@@ -118,5 +118,6 @@ def process_logs(log_file_path):
         all_successful = all(isinstance(result, dict) for result in results)
         if not all_successful:
             print("Warning: Not all log lines were processed successfully.")
-        print("Processing complete.")
+        else:
+            print("Processing complete. All log lines were processed successfully.")
         return results
