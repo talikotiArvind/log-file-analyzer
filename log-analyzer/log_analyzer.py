@@ -1,12 +1,11 @@
-from model import LogEntry
-import os
-import json
-
 '''
 This module provides a function to analyze log file.
 '''
 
-LOG_FILE_PATH = "app.log"  # Path to the log file
+from model import LogEntry
+import os
+import json
+import concurrent.futures
 
 def read_log_file(file_path):
     """
@@ -45,11 +44,6 @@ def parse_log_line(line):
             return dict(entry)
     except Exception as e:
         return f"Failed to parse line: {line}. Error: {e}"
-        
-import concurrent.futures
-
-def process_line(line):
-    return parse_log_line(line)
 
 def dump_to_json(data, output_file):
     """
@@ -66,12 +60,6 @@ def dump_to_json(data, output_file):
         # print(f"Data successfully written to {output_file}")
     except Exception as e:
         print(f"An error occurred while writing to JSON file: {e}")
-
-
-with concurrent.futures.ThreadPoolExecutor() as executor:
-    futures = {executor.submit(process_line, line): line for line in read_log_file(LOG_FILE_PATH)}
-    processed_logs = [future.result() for future in futures]
-    dump_to_json(processed_logs, "processed_logs.json")
     
 def log_results_decorator(func):
     """
@@ -88,25 +76,20 @@ def log_results_decorator(func):
                 failed_entries.append(result)
         
         # Dump successful entries to a JSON file
-        dump_to_json(successful_entries, "successful_entries.json")
+        dump_to_json(successful_entries, "./output/successful_entries.json")
         
         # Dump failed entries to a JSON file
-        dump_to_json(failed_entries, "failed_entries.json")
+        dump_to_json(failed_entries, "./output/failed_entries.json")
         
         return successful_entries  # Return only successful entries for further processing
     
     return wrapper
 
 @log_results_decorator
-def process_logs():
+def process_logs(log_file_path):
     """
     Process log lines and return the results.
     """
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = {executor.submit(process_line, line): line for line in read_log_file(LOG_FILE_PATH)}
+        futures = {executor.submit(parse_log_line, line): line for line in read_log_file(log_file_path)}
         return [future.result() for future in futures]
-
-# Apply the decorator and process logs
-processed_logs = process_logs()
-
-print("\n\nFinally completed !!!")

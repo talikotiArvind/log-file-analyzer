@@ -25,7 +25,7 @@ class LogEntry(BaseModel):
     
     date_time: str = Field(..., description="Timestamp of the log in format YYYY-MM-DD HH:MM:SS")
     service_name: str = Field(..., description="Name of the service generating the log")
-    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = Field(
+    log_level: Literal["INFO", "WARN", "ERROR"] = Field(
         ..., description="Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL"
     )
     message: str = Field(..., description="The actual log message")
