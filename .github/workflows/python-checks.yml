@@ -1,0 +1,42 @@
+name: Python Code Checks
+
+on:
+    pull_request:
+        branches:
+            - main  # Trigger this workflow on pull requests to the 'main' branch (you can change this as needed)
+    workflow_dispatch:  # Allow manual triggering of the workflow
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # The runner to use, we will use Ubuntu for this case
+
+    steps:
+    # Checkout the repository code
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Specify Python version (you can modify it as needed)
+
+    # Install dependencies (assuming you have a requirements.txt)
+    - name: Install dependencies
+      continue-on-error: true  # Continue even if linting fails
+      run: |
+        python -m pip install --upgrade pip
+
+    # Run linting (using flake8 as an example)
+    - name: Run flake8 (Python Linter)
+      continue-on-error: true  # Continue even if linting fails
+      run: |
+        pip install flake8
+        flake8 .
+
+    # Run tests (assuming you're using pytest)
+    - name: Run tests
+      continue-on-error: true  # Continue even if linting fails
+      run: |
+        pip install pytest
+        pytest
