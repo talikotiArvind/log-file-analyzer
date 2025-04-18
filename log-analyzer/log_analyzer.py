@@ -19,7 +19,6 @@ class LogAnalysis(BaseModel):
     service_entries: dict = {}
     log_level_entries: dict = {} 
 
-
 def read_log_file(file_path):
     """
     Generator function to read a log file line by line.
@@ -109,12 +108,15 @@ def log_results_decorator(func):
 def process_logs(log_file_path):
     """
     Process log lines and return the results.
+    Validate if all processes were successful.
     """
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(parse_log_line, line): line for line in read_log_file(log_file_path)}
-        return [future.result() for future in futures]
-
-
-app_path = "D:/my-git-repo/log-file-analyzer/log-file-analyzer/log-analyzer/app.log"
-process_logs("app.log")
-# process_logs(app_path)
+        results = [future.result() for future in futures]
+        
+        # Check if all processes were successful
+        all_successful = all(isinstance(result, dict) for result in results)
+        if not all_successful:
+            print("Warning: Not all log lines were processed successfully.")
+        print("Processing complete.")
+        return results
