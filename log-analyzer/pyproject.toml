@@ -1,18 +1,23 @@
 [project]
 name = "log-analyzer"
 version = "0.1.0"
-description = ""
+description = "Python tool to analyze the log file of a specified format and provide statistics"
 authors = [
     {name = "Arvind A T",email = "talikotiarvind16@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "pandas (>=2.2.3,<3.0.0)",
+    "pydantic (>=2.11.3,<3.0.0)"
 ]
 
 [tool.poetry]
 packages = [{include = "log_analyzer", from = "src"}]
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

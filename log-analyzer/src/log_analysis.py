@@ -1,8 +1,7 @@
 
 from pydantic import BaseModel
 import json
-import csv
-import os
+from collections import Counter
 import pandas as pd
 
 class LogAnalysis(BaseModel):
@@ -15,6 +14,7 @@ class LogAnalysis(BaseModel):
     failed_entries: list = []
     service_entries: dict = {}
     log_level_entries: dict = {}
+    error_messages: list = []
 
     def analyze_entry(self, entry):
         """
@@ -32,12 +32,7 @@ class LogAnalysis(BaseModel):
         Export the log analysis data to a JSON file.
         """
 
-        data = {
-            "successful_entries": self.successful_entries,
-            "failed_entries": self.failed_entries,
-            "service_entries": self.service_entries,
-            "log_level_entries": self.log_level_entries,
-        }
+        data = self.get_stat_data()
 
         with open(file_path, "w") as json_file:
             json.dump(data, json_file, indent=4)
@@ -75,6 +70,8 @@ class LogAnalysis(BaseModel):
             if log_level not in self.log_level_entries:
                 self.log_level_entries[log_level] = []
             self.log_level_entries[log_level].append(entry)
+
+
     
     def get_stat_data(self):
         """
@@ -84,9 +81,23 @@ class LogAnalysis(BaseModel):
             "successful_entries": len(self.successful_entries),
             "failed_entries": len(self.failed_entries),
             "service_entries": {k: len(v) for k, v in self.service_entries.items()},
-            "log_level_entries": {k: len(v) for k, v in self.log_level_entries.items()}
+            "log_level_entries": {k: len(v) for k, v in self.log_level_entries.items()},
+            "most_common_error": self.get_most_commom_error_msg()
         }
     
+    def get_most_commom_error_msg(self):
+        """
+        Get the most common error message from the failed entries.
+        """
+        self.get_error_messages()
+        return Counter(self.error_messages)
+    
+    def get_error_messages(self):
+        """
+        Get all error messages from the successfull entries.
+        """
+        self.error_messages = [entry.get("message") for entry in self.log_level_entries['ERROR'] if isinstance(entry, dict)]
+
     def to_csv(self):
         """
             Convert the log analysis data into a single CSV file with multiple pages (sheets).
@@ -111,3 +122,7 @@ class LogAnalysis(BaseModel):
             for log_level, entries in self.log_level_entries.items()
             ])
             log_level_entries_df.to_excel(writer, sheet_name="Log Level Entries", index=False)
+
+            # Write most common error messages to a sheet
+            most_common_error_df = pd.DataFrame(self.get_most_commom_error_msg().items(), columns=["Error Message", "Count"])
+            most_common_error_df.to_excel(writer, sheet_name=" Error Messages count ", index=False)

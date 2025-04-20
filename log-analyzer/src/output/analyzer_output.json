@@ -66,5 +66,23 @@
         "service_name": "ServiceE",
         "log_level": "DEBUG",
         "message": "This is a debug message"
+    },
+    {
+        "date_time": "2023-03-01 09:12:01",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Job X failed to start"
+    },
+    {
+        "date_time": "2023-03-01 09:13:01",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Job X failed to start"
+    },
+    {
+        "date_time": "2023-03-01 09:44:01",
+        "service_name": "ServiceB",
+        "log_level": "ERROR",
+        "message": "Job X failed to start"
     }
 ]
