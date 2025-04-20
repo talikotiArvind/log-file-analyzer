@@ -57,7 +57,8 @@ We get 3 types of output
 
 ### NOTE:
 
-**Possible further updates that be done:**
+**Possible further updates that could have been done:**
 
 1. Dockerize the application and use it as plugin service
-2. Create it as python package 
+2. Create it as python package using poetry or uv
+3. Include frontend (GUI, WebUI or grafana) for visualising the data 
